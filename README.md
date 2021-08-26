@@ -61,6 +61,12 @@ Usage of download.exe:
 
 ```
 
+### 使用示例
+```shell
 
+ download.exe -path="./tmp" -url="https://github.com/lyr-2000/go-downloader/blob/master/download.exe"
+
+
+```
 
 
