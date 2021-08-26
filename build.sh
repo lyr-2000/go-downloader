@@ -1,3 +1,3 @@
-go build main.go & mv main download
+go build  -o download
 
 
