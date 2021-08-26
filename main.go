@@ -139,7 +139,7 @@ func parseFlag() (config DownloadConfig,err error){
 	//解析
 	flag.Parse()
 	if config.Url=="" {
-		return config, errors.New("没有指定下载链接,请输入 -path")
+		return config, errors.New("没有指定下载链接,请输入 -url ")
 	}
 	if config.WorkerCnt<=0 {
 		return config,errors.New("输入的工作线程数不合法,请合法设置 -workCnt")
