@@ -443,8 +443,6 @@ func (t *FileTask) DownloadToTmpPath(id int) error {
 		n,derr := resp.Body.Read(buf)
 		if n>0 {
 			//注意： n=0 不一定就是下载完成了
-			//if fileContentOffset==0{
-				//直接写
 			writedSize,err := tmpFile.WriteAt(buf[0:n], writeOffset)
 			if err!=nil {
 				log.Fatalf("write to file error %v\n",err)
@@ -452,20 +450,10 @@ func (t *FileTask) DownloadToTmpPath(id int) error {
 
 			}
 			writeOffset += int64(writedSize)
-			//}else {
-			//	//如果大于0 ，说明有文件了
-			//	_,err = tmpFile.Write(buf[0:n])
-			//	if err!=nil {
-			//		log.Fatalf("append error := %v",err)
-			//		os.Exit(1)
-			//	}
-			//}
-
 
 
 		}
-		//log.Printf("n:= %d",n)
-		//log.Printf("err := %v",derr)
+
 		if derr==io.EOF {
 			//t.File.
 			return nil
@@ -473,11 +461,6 @@ func (t *FileTask) DownloadToTmpPath(id int) error {
 		if derr!=nil {
 			return derr
 		}
-
-		//if n<t.BufferSize {
-		//	//比如 倒一桶水，没装满，说明没水了
-		//	break
-		//}
 
 	}
 	//------------ endl ----------------

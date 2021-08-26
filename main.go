@@ -127,7 +127,7 @@ func parseFlag() (config DownloadConfig,err error){
 	flag.StringVar(&config.Url,"url","","url不能为空，请设置 -url 指定")
 	flag.StringVar(&config.DownLoadPath,"path","./","文件下载路径")
 	flag.StringVar(&config.TmpPath,"tmp","./tmp","下载的临时文件")
-	flag.IntVar(&config.CacheSize,"buf",1024<<2,"缓冲区大小【单位：字节】")
+	flag.IntVar(&config.CacheSize,"buf",1024*100,"缓冲区大小【单位：字节】")
 
 	flag.IntVar(&config.WorkerCnt,"c",8,"下载线程数")
 	flag.StringVar(&config.Proxy,"proxy","","设置代理,【本人没用过】：例如:http://127.0.0.1:7890")
