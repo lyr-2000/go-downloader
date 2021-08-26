@@ -279,7 +279,7 @@ func (t *FileTask) downloadToTmp() error {
 		id := <- workerChannel
 		t.DownloadSize += t.FileSlice[id].End - t.FileSlice[id].Start + 1
 		res++
-		log.Printf("\n任务下载完成 ,完成数 %d\n",res)
+		//log.Printf("\n任务下载完成 ,完成数 %d\n",res)
 		t.Bar.PrintBar(res)
 	}
 	//开始合并文件
@@ -387,10 +387,7 @@ func (t *FileTask) DownloadBlock(id int) error {
 // 下载到临时目录里面，后面再合并
 
 func (t *FileTask) DownloadToTmpPath(id int) error {
-	req,err := NewGetRequestObject(t.Url)
-	if err !=nil {
-		return err
-	}
+
 	originName := t.File.Name()
 	tmpName_ := fileName(originName)
 	//indexName := IndexName(tmpName_, int(t.WorkCnt),id)
@@ -400,6 +397,10 @@ func (t *FileTask) DownloadToTmpPath(id int) error {
 	r := ref.End
 
 	var fileContentOffset int64 = 0
+	req,err := NewGetRequestObject(t.Url)
+	if err !=nil {
+		return err
+	}
 	if r!=-1 && t.WorkCnt>1 {
 		tmpStat, tmpErr := os.Stat(indexName)
 
@@ -419,6 +420,13 @@ func (t *FileTask) DownloadToTmpPath(id int) error {
 	}
 
 	resp ,err := NewRequestClient(t.ProxyUrl,t.Timeout).Do(req)
+	if err!=nil {
+		return err
+
+	}
+	//关闭http连接
+	defer resp.Body.Close()
+
 	var tmpFile *os.File
 
 	tmpFile,err = os.OpenFile(indexName,os.O_WRONLY|os.O_CREATE,0777)
@@ -434,11 +442,15 @@ func (t *FileTask) DownloadToTmpPath(id int) error {
 	if err!=nil {
 		return err
 	}
-	defer resp.Body.Close()
+
 	var buf = make([]byte,t.BufferSize)
 	//writeOFFset , 文件写入的位置， 从文件末尾写入
 	var writeOffset int64 = fileContentOffset
-
+	//needReadCnt := fileContentOffset
+	//BarInstance()
+	curBar := getWorkingBar(int(r-l+1),t.BufferSize,id)
+	//var readCnt int64
+	//curBar.PrintEnd()
 	for {
 
 		//循环读取任务
@@ -452,11 +464,15 @@ func (t *FileTask) DownloadToTmpPath(id int) error {
 
 			}
 			writeOffset += int64(writedSize)
+			//readCnt= readCnt+int64(n)
+
+			curBar.PrintBar(int(writeOffset /int64( t.BufferSize)))
 
 
 		}
 
 		if derr==io.EOF {
+			curBar.PrintEnd("\n")
 			//t.File.
 			return nil
 		}

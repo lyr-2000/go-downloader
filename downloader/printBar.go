@@ -1,6 +1,9 @@
 package downloader
 
-import "github.com/redmask-hb/GoSimplePrint/goPrint"
+import (
+	"fmt"
+	"github.com/redmask-hb/GoSimplePrint/goPrint"
+)
 
 func BarInstance(workerCnt int ) *goPrint.Bar{
 	bar := goPrint.NewBar(workerCnt)
@@ -17,5 +20,13 @@ func BarInstance(workerCnt int ) *goPrint.Bar{
 	return bar
 }
 
+func getWorkingBar(byteSize int,bufSize,id int) *goPrint.Bar {
+	cnt:=byteSize/bufSize
 
+	bar := goPrint.NewBar(cnt)
+	bar.SetNotice(fmt.Sprintf("任务[%v]下载进度",id))
+	bar.SetGraph("☆")
+
+	return bar
+}
 
