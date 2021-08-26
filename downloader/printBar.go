@@ -20,10 +20,10 @@ func BarInstance(workerCnt int ) *goPrint.Bar{
 	return bar
 }
 
-func getWorkingBar(byteSize int,bufSize,id int) *goPrint.Bar {
+func getWorkingBar(byteSize int64,bufSize int64,id int) *goPrint.Bar {
 	cnt:=byteSize/bufSize
 
-	bar := goPrint.NewBar(cnt)
+	bar := goPrint.NewBar(int(cnt))
 	bar.SetNotice(fmt.Sprintf("任务[%v]下载进度",id))
 	bar.SetGraph("☆")
 

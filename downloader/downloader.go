@@ -448,7 +448,7 @@ func (t *FileTask) DownloadToTmpPath(id int) error {
 	var writeOffset int64 = fileContentOffset
 	//needReadCnt := fileContentOffset
 	//BarInstance()
-	curBar := getWorkingBar(int(r-l+1),t.BufferSize,id)
+	curBar := getWorkingBar( r-l+1, int64(t.BufferSize),id)
 	//var readCnt int64
 	//curBar.PrintEnd()
 	for {
