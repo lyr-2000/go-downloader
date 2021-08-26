@@ -397,42 +397,54 @@ func (t *FileTask) DownloadToTmpPath(id int) error {
 	l := ref.Start
 	r := ref.End
 
-
+	var fileContentOffset int64 = 0
 	if r!=-1 && t.WorkCnt>1 {
 		tmpStat, tmpErr := os.Stat(indexName)
+
 		if tmpErr ==nil && tmpStat!=nil && tmpStat.Size() == r-l+1 {
 			log.Printf("\n检索到已下载的分片 id:=%v\n",id)
 			//已经下载完成了
 			return nil
 		}
-		//if tmpStat!=nil {
-		//	log.Printf("tmpFilesize := %v,  range size := %d",tmpStat.Size(),r-l+1)
-		//}
-
+		if tmpErr==nil  && tmpStat!=nil {
+			fileContentOffset = tmpStat.Size()
+			log.Printf("任务:%v 使用断点下载",id)
+		}
 		//如果 r 是 -1 ，就不用设置 range 分片，否则的话 就是 range分片下载
 		req.Header.Set("Range",
-			fmt.Sprintf("bytes=%v-%v",l,r))
+			fmt.Sprintf("bytes=%v-%v",l+fileContentOffset,r))
 
 	}
+
 	resp ,err := NewRequestClient(t.ProxyUrl,t.Timeout).Do(req)
-	tmpFile,err := os.Create(indexName)
+	var tmpFile *os.File
+
+	tmpFile,err = os.OpenFile(indexName,os.O_WRONLY|os.O_CREATE,0777)
 	if err!=nil {
-		log.Fatalf("err:= %v\n",err)
+		log.Fatalf("append to file err := %v",err)
 		return err
 	}
+	//tmpFile.Seek()
+	defer tmpFile.Close()
+
+
 	//获得响应
 	if err!=nil {
 		return err
 	}
 	defer resp.Body.Close()
 	var buf = make([]byte,t.BufferSize)
-	//writeOFFset
-	var writeOffset int64 = 0
+	//writeOFFset , 文件写入的位置， 从文件末尾写入
+	var writeOffset int64 = fileContentOffset
+
 	for {
+
 		//循环读取任务
 		n,derr := resp.Body.Read(buf)
 		if n>0 {
 			//注意： n=0 不一定就是下载完成了
+			//if fileContentOffset==0{
+				//直接写
 			writedSize,err := tmpFile.WriteAt(buf[0:n], writeOffset)
 			if err!=nil {
 				log.Fatalf("write to file error %v\n",err)
@@ -440,6 +452,16 @@ func (t *FileTask) DownloadToTmpPath(id int) error {
 
 			}
 			writeOffset += int64(writedSize)
+			//}else {
+			//	//如果大于0 ，说明有文件了
+			//	_,err = tmpFile.Write(buf[0:n])
+			//	if err!=nil {
+			//		log.Fatalf("append error := %v",err)
+			//		os.Exit(1)
+			//	}
+			//}
+
+
 
 		}
 		//log.Printf("n:= %d",n)

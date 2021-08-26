@@ -106,9 +106,14 @@ type DownloadConfig struct {
 
 
 
+
+
 }
 func (w *DownloadConfig) String() string {
-	return fmt.Sprintf("url:=%v,\nworkCnt:=%v\n, downloadPath:=%v\n",w.Url,w.WorkerCnt,w.DownLoadPath)
+	return fmt.Sprintf("url:=%v," +
+		"\nworkCnt:=%v\n, downloadPath:=%v\n" +
+		"tmpPath:=%v" +
+		"",w.Url,w.WorkerCnt,w.DownLoadPath,w.TmpPath)
 }
 
 

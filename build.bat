@@ -1,4 +1,4 @@
-go build main.go  -o download.exe
+go build   -o ./download.exe
 
 
 
