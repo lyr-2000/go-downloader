@@ -14,6 +14,7 @@ func TestDownload(t *testing.T) {
 			"./wox_008.exe",
 			1024<<2,
 			"",
+			333,
 		)
 		if err==nil {
 			break
@@ -33,6 +34,7 @@ func TestDownloadZip(t *testing.T) {
 		"./result.zip",
 		1024<<1,
 		"",
+		333,
 	)
 	if err !=nil {
 		fmt.Printf(err.Error())
@@ -46,6 +48,7 @@ func TestDownloadZip22(t *testing.T) {
 		"wox1.exe",
 		1024<<2,
 		"",
+		33,
 	)
 	if err !=nil {
 		fmt.Printf(err.Error())
@@ -62,6 +65,7 @@ func TestDownload222(t *testing.T) {
 		"./res.html",
 		2048*8,
 		"",
+		33,
 	)
 	if err !=nil {
 		fmt.Printf(err.Error())
