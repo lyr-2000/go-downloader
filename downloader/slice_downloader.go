@@ -1,6 +1,7 @@
 package downloader
 
 import (
+	"fmt"
 	"log"
 	"os"
 )
@@ -42,6 +43,7 @@ func (w *SliceDownloaderImpl) Download(	WorkerCnt int  ,	//协程数量
 	timeout int64,//超时时间
 
 ) error {
+	fmt.Println(DownLoadPath)
 	f, err := os.Create(DownLoadPath)
 	defer f.Close()
 	if err!=nil {

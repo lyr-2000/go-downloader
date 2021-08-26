@@ -210,6 +210,7 @@ func (t *FileTask) download() error {
 	workerChannel := make(chan int,t.WorkCnt)
 	if t.Bar==nil {
 		t.Bar = BarInstance(int(t.WorkCnt))
+
 	}
 	for i:= range t.FileSlice {
 		go func(id int) {
@@ -238,6 +239,7 @@ func (t *FileTask) download() error {
 		res++
 		log.Printf("任务下载完成 ,完成数 %d\n",res)
 		t.Bar.PrintBar(res)
+
 	}
 	log.Printf("总下载量为 :=%v", t.DownloadSize)
 

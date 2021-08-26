@@ -7,6 +7,13 @@ func BarInstance(workerCnt int ) *goPrint.Bar{
 	bar.SetNotice("下载进度：")
 	bar.SetGraph(">>")
 	bar.SetNoticeColor(goPrint.FontColor.Purple)
+	bar.SetGraphColor(goPrint.FontColor.Purple)
+
+	//bar.SetColor(goPrint.BarColor{
+	//	Notice: goPrint.FontColor.Purple,
+	//	Graph: goPrint.FontColor.Aqua,
+	//})
+
 	return bar
 }
 

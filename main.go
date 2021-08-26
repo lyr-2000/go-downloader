@@ -46,8 +46,9 @@ func main() {
 
 		//正式下载
 		for {
-			err = d.Download(config.WorkerCnt,config.Url,
-				config.DownLoadPath+fName(config.Url),
+			err = d.Download(config.WorkerCnt,
+				config.Url,
+				config.DownLoadPath+"/"+fName(config.Url),
 				config.CacheSize,
 				config.Proxy,
 				int64(time.Second)* int64(config.Timeout) ,
@@ -68,8 +69,9 @@ func main() {
 
 		//正式下载
 		for {
-			err = d.Download(config.WorkerCnt,config.Url,
-				config.DownLoadPath+fName(config.Url),
+			err = d.Download(config.WorkerCnt,
+				config.Url,
+				config.DownLoadPath+"/"+fName(config.Url),
 				config.CacheSize,
 				config.Proxy,
 				int64(time.Second)* int64(config.Timeout) ,
